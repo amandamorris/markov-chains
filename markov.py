@@ -11,7 +11,6 @@ def open_and_read_file(file_path):
     # your code goes here
     txt_string = open(file_path).read()
 
-
     return txt_string
 
 
@@ -33,35 +32,43 @@ def make_chains(text_string):
     # your code goes here
     words = text_string.split()
     for index in range(0, len(words) - 2):
-        tup = (words[index], words[index + 1])
-        if chains.get(tup):
-            chains[tup].append(words[index + 2])
+        bigram = (words[index], words[index + 1])
+        if chains.get(bigram):
+            chains[bigram].append(words[index + 2])
         else:
-            chains[tup] = []
-            chains[tup].append(words[index + 2])
+            chains[bigram] = []
+            chains[bigram].append(words[index + 2])
     return chains
 
 
 def make_text(chains):
     """Takes dictionary of markov chains; returns random text."""
+    text = choice(chains.keys())
+    sentence = text[0] + " " + text[1]
 
-    text = ""
-
-    # your code goes here
-
-    return text
-
+#    for i in range(10):
+    while True:
+        # your code goes here
+        try:
+            follow_word = choice(chains[text])
+        except Exception:
+            return sentence
+        next_bigram = (text[1], follow_word)
+        text = next_bigram
+        sentence += " " + follow_word
+    return sentence
 
 input_path = "green-eggs.txt"
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
-print input_text
+#print input_text
 
 # Get a Markov chain
 chains = make_chains(input_text)
-print chains
+#print chains
 # # Produce random text
-# random_text = make_text(chains)
+random_text = make_text(chains)
+print random_text
 
 # print random_text
