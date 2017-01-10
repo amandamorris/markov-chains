@@ -1,4 +1,5 @@
 from random import choice
+import sys
 
 
 def open_and_read_file(file_path):
@@ -14,7 +15,7 @@ def open_and_read_file(file_path):
     return txt_string
 
 
-def make_chains(text_string):
+def make_chains(text_string, ngram_num):
     """Takes input text as string; returns _dictionary_ of markov chains.
 
     A chain will be a key that consists of a tuple of (word1, word2)
@@ -31,18 +32,21 @@ def make_chains(text_string):
 
     # your code goes here
     words = text_string.split()
-    for index in range(0, len(words) - 2):
-        bigram = (words[index], words[index + 1])
+    for index in range(0, len(words) - ngram_num):
+        bigram = tuple(words[index:(index + ngram_num)])
         chains.setdefault(bigram, [])
-        chains[bigram].append(words[index + 2])
+        chains[bigram].append(words[index + ngram_num])
 
     return chains
 
 
-def make_text(chains):
+def make_text(chains, ngram_num):
     """Takes dictionary of markov chains; returns random text."""
     text = choice(chains.keys())
-    sentence = text[0] + " " + text[1]
+    sentence = ""
+    for index in range(ngram_num):
+        sentence = sentence + " " + text[index]
+#    sentence = text[0] + " " + text[1]
 
 #    for i in range(10):
     while True:
@@ -51,22 +55,24 @@ def make_text(chains):
             follow_word = choice(chains[text])
         except Exception:
             return sentence
-        next_bigram = (text[1], follow_word)
-        text = next_bigram
+        bigram_list = list(text)[1:ngram_num]
+        bigram_list.append(follow_word)
+        text = tuple(bigram_list)
         sentence += " " + follow_word
     return sentence
 
-input_path = "green-eggs.txt"
+input_path = sys.argv[1]
+ngram_num = int(sys.argv[2])
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
 #print input_text
 
 # Get a Markov chain
-chains = make_chains(input_text)
-#print chains
+chains = make_chains(input_text, ngram_num)
+print chains
 # # Produce random text
-random_text = make_text(chains)
+random_text = make_text(chains, ngram_num)
 print random_text
 
 # print random_text
