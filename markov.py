@@ -42,7 +42,8 @@ def make_chains(text_string, ngram_num):
 
 def make_text(chains, ngram_num):
     """Takes dictionary of markov chains; returns random text."""
-    text = choice(chains.keys())
+    list_key_cap = [key for key in chains.keys() if key[0][0].isupper()]
+    text = choice(list_key_cap)
     sentence = ""
     for index in range(ngram_num):
         sentence = sentence + " " + text[index]
@@ -70,7 +71,7 @@ input_text = open_and_read_file(input_path)
 
 # Get a Markov chain
 chains = make_chains(input_text, ngram_num)
-print chains
+#print chains
 # # Produce random text
 random_text = make_text(chains, ngram_num)
 print random_text
