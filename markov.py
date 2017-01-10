@@ -33,11 +33,9 @@ def make_chains(text_string):
     words = text_string.split()
     for index in range(0, len(words) - 2):
         bigram = (words[index], words[index + 1])
-        if chains.get(bigram):
-            chains[bigram].append(words[index + 2])
-        else:
-            chains[bigram] = []
-            chains[bigram].append(words[index + 2])
+        chains.setdefault(bigram, [])
+        chains[bigram].append(words[index + 2])
+
     return chains
 
 
