@@ -13,9 +13,12 @@ def open_file(filename):
             if line[0] != "[" and line[0] != "(":
                 speech_only.append(line)
     for line in speech_only:
-        m = re.search('\((.*?)\)', line)
-        if m:
-            print m.group(0)
+        m = re.findall(r'\((.*?)\)', line)
+        if m != []:
+            for i in range(len(m)):
+                line = line.replace("(" + m[i] + ")", "")
+            print line
+
     #print speech_only
 
 open_file("friends.txt")
