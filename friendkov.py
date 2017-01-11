@@ -17,7 +17,6 @@ def open_and_clean_file(filename):
     for line in speech_only:
         m = re.findall(r'\((.*?)\)', line)
         n = re.findall(r'\[(.*?)\]', line)
-        print m
         if m != []:
             for i in range(len(m)):
                 line = line.replace("(" + m[i] + ")", "")
@@ -49,5 +48,8 @@ clean_file= open_and_clean_file("friends.txt")
 character_dic = build_dictionary(clean_file)
 for character in character_dic.keys():
     character_dic[character] = make_chains(character_dic[character], 2)
-pprint.pprint(character_dic)
+#pprint.pprint(character_dic["Monica"])
+generated_char_speech = make_text(character_dic["Monica"], 2)  # todo: troubleshoot this - something else is printing
+
+pprint.pprint(generated_char_speech)
 # \((.*?)\)
