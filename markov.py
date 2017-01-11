@@ -42,25 +42,37 @@ def make_chains(text_string, ngram_num):
 
 def make_text(chains, ngram_num):
     """Takes dictionary of markov chains; returns random text."""
+
+
     list_key_cap = [key for key in chains.keys() if key[0][0].isupper()]
     text = choice(list_key_cap)
     sentence = ""
     for index in range(ngram_num):
-        sentence = sentence + " " + text[index]
-#    sentence = text[0] + " " + text[1]
+        sentence = sentence + text[index] + " "
 
-#    for i in range(10):
+    max_length = 150
+    terminal_punct = [".", "?", "!"]
+
     while True:
         # your code goes here
-        try:
-            follow_word = choice(chains[text])
-        except Exception:
-            return sentence
-        bigram_list = list(text)[1:ngram_num]
-        bigram_list.append(follow_word)
-        text = tuple(bigram_list)
-        sentence += " " + follow_word
-    return sentence
+        if len(sentence) <= max_length:
+            try:
+                follow_word = choice(chains[text])
+            except Exception:
+                return sentence
+
+            bigram_list = list(text)[1:ngram_num]
+            bigram_list.append(follow_word)
+            text = tuple(bigram_list)
+            sentence += " " + follow_word
+        else:
+            for i in range(1, len(sentence)):
+                if sentence[-i-1] in terminal_punct:
+                    return sentence[:-i]
+            print "Our randomly-generated text has no terminal punctuation in the first {} characters.".format(max_length)
+            return
+
+
 
 input_path = sys.argv[1]
 ngram_num = int(sys.argv[2])
